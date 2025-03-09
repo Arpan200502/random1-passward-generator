@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caesar Cipher</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: #121212;
+            color: #0ff;
+            text-align: center;
+            padding: 20px;
+        }
+        .logo {
+            font-size: 50px;
+            font-weight: bold;
+            color: #ffcc00;
+            text-shadow: 0px 0px 15px #ffcc00;
+            animation: flicker 1.5s infinite alternate;
+        }
+        @keyframes flicker {
+            0% { opacity: 1; text-shadow: 0px 0px 15px #ffcc00; }
+            50% { opacity: 0.7; text-shadow: 0px 0px 5px #ffcc00; }
+            100% { opacity: 1; text-shadow: 0px 0px 15px #ffcc00; }
+        }
+        h1 {
+            color: #ff00ff;
+            text-shadow: 0px 0px 15px #ff00ff;
+            font-size: 28px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        select, textarea, input {
+            width: 300px;
+            background: black;
+            color: #0ff;
+            font-size: 16px;
+            border: 2px solid #0ff;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+        }
+        textarea {
+            height: 100px;
+            resize: none;
+        }
+        button {
+            background: #0ff;
+            color: black;
+            font-size: 18px;
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #ff00ff;
+            color: white;
+            transform: scale(1.1);
+        }
+        #result {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffcc00;
+            text-shadow: 0px 0px 10px #ffcc00;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo">CAESAR CIPHER</div>
+
+    <h1>Caesar Cipher 🔐</h1>
+
+    <div class="container">
+        <label for="mode">Choose Mode:</label>
+        <select id="mode">
+            <option value="encrypt">Encrypt 🔒</option>
+            <option value="decrypt">Decrypt 🔓</option>
+        </select>
+
+        <textarea id="message" placeholder="Enter your message..."></textarea>
+
+        <label for="shift">Shift Value:</label>
+        <input type="number" id="shift" min="1" max="25" value="3">
+    </div>
+
+    <button onclick="processCipher()">Submit</button>
+
+    <h2>Output:</h2>
+    <p id="result"></p>
+
+    <script>
+        function caesarCipher(str, shift, encrypt = true) {
+            const alphabet = "abcdefghijklmnopqrstuvwxyz";
+            shift = encrypt ? shift : -shift; // Reverse shift for decryption
+            let result = "";
+
+            for (let char of str) {
+                let lowerChar = char.toLowerCase();
+                if (alphabet.includes(lowerChar)) {
+                    let newIndex = (alphabet.indexOf(lowerChar) + shift) % 26;
+                    if (newIndex < 0) newIndex += 26;
+                    let newChar = alphabet[newIndex];
+                    result += char === char.toUpperCase() ? newChar.toUpperCase() : newChar;
+                } else {
+                    result += char;
+                }
+            }
+            return result;
+        }
+
+        function processCipher() {
+            let mode = document.getElementById("mode").value;
+            let message = document.getElementById("message").value;
+            let shift = parseInt(document.getElementById("shift").value);
+            let isEncrypt = mode === "encrypt";
+            let output = caesarCipher(message, shift, isEncrypt);
+            document.getElementById("result").innerText = output;
+        }
+    </script>
+
+</body>
+</html>
